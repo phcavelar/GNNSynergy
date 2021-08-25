@@ -14,3 +14,6 @@
 - preTrain.py # Train the GNNSynergy model on DrugComb dataset in Singl-View.
 - finetuneDynamic.py # Train the GNNSynergy model on DrugComb dataset in Multi-View.
 - case_studey.py # The case study code.
+
+### Supplementary of GNNSynergy
+It is a supplementary materials of our GNNSynergy.
