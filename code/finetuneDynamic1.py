@@ -49,7 +49,7 @@ def main():
     parser.add_argument('--thresold', type=int, default=10, help='Thresold to divide positive/additive/negative.')
     parser.add_argument('--top', type=int, default=4, help='Thresold to select top cell-line')
     parser.add_argument('--pcak', type=int, default=10, help='Thresold to select top cell-line')
-    parser.add_argument('--gpu', type=str, default='0', help='gpu device ids for CUDA_VISIBLE_DEVICES')
+    parser.add_argument('--gpu', type=str, default='1', help='gpu device ids for CUDA_VISIBLE_DEVICES')
     parser.add_argument('--file', default='bestWish.pkl', help='Name of save model')
     parser.add_argument('--init', default='Kaiming', help='Name of save model')
 
@@ -82,8 +82,8 @@ def main():
     # 接下来在特定的tissue里面进行训练
     for tissue, id in tissue_id_dict.items():
         number_drug_pair = 0
-        if tissue != 'large_intestine':
-            continue
+        # if tissue != 'large_intestine':
+        #     continue
         print("在{}内训练....".format(tissue))
         print(
             "HyperParams:\nlr:{}\nhidden:{}\ndhid1:{}\ndropout:{}\nDrop:{}\ninDrop:{}\nDrop_agg:{}\ninDrop_agg:{}".format(
@@ -148,14 +148,15 @@ def main():
             drug_fea1, cell_line_fea1 = featureNormalize(drug_fea, cell_line_fea)
 
             # PCA降维
-            pca = PCA(n_components=10)
-            pca.fit(cell_line_fea)
-            cell_line_fea_pca = pca.fit_transform(cell_line_fea)
+            print("PCA维度为:{}".format(args.pcak))
+            pca = PCA(n_components=args.pcak)
+            pca.fit(cell_line_fea1)
+            cell_line_fea_pca = pca.fit_transform(cell_line_fea1)
+            # cell_line_fea_pca = cell_line_fea1
 
             y_true = synergies
 
             cell_similartiy = cal_cosine(cell_line_fea_pca)
-
             # 获得已经排好序的细胞系相似度
             similarity = []
             cell_specific_similiarity = cell_similartiy[cell_i]

@@ -33,11 +33,10 @@ class TransferCell(nn.Module):
         super(TransferCell, self).__init__()
         self.now_id = now_id
 
-        # self.attW = Parameter(torch.empty(len(similarity)))
-        # nn.init.normal_(self.attW)
-        self.attW = Parameter(torch.FloatTensor(similarity))
-
-
+        self.attW = Parameter(torch.empty(len(similarity)))
+        nn.init.normal_(self.attW)
+        # self.attW = Parameter(torch.FloatTensor(similarity))
+        # self.attW = torch.FloatTensor(similarity)
         self.num_cell_lines = num_cell_lines
 
 
@@ -75,16 +74,12 @@ class TransferCell(nn.Module):
         t = 0
         for v in range(self.num_cell_lines):
             if v != self.now_id and isFlag:
-                # subview = torch.mul((1./len(self.similarity)), self.subView[t](x, cell_line_adjs_pos[v], cell_line_adjs_add[v],
-                #                                                cell_line_adjs_neg[v]))
                 subview = torch.mul(self.similarity[t], self.subView[t](x, cell_line_adjs_pos[v], cell_line_adjs_add[v],
                                                                cell_line_adjs_neg[v]))
 
                 isFlag = False
                 t += 1
             elif v != self.now_id:
-                # temp = torch.mul((1./len(self.similarity)),self.subView[t](x, cell_line_adjs_pos[v], cell_line_adjs_add[v],
-                #                                                cell_line_adjs_neg[v]))
                 temp = torch.mul(self.similarity[t], self.subView[t](x, cell_line_adjs_pos[v], cell_line_adjs_add[v],
                                                                        cell_line_adjs_neg[v]))
                 subview = torch.cat([subview, temp], dim=1)
