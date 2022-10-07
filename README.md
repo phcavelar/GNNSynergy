@@ -7,12 +7,12 @@
 1. scipy == 1.4.1
 1. pandas == 1.0.3
 ### Repository Structure
-- GNNSynergy/data: DrugComb dataset
+- GNNSynergy/data: DrugComb dataset and DrugCombDB database
 - GNNSynergy/code: our GNNSynergy model
 
 ### How to run our code
 - preTrain.py # Train the GNNSynergy model on DrugComb dataset in Singl-View.
-- finetuneDynamic.py # Train the GNNSynergy model on DrugComb dataset in Multi-View.
+- finetune_twoGraph.py # Train the GNNSynergy model on DrugComb dataset in Multi-View.
 - case_studey.py # The case study code.
 
 ### Supplementary of GNNSynergy
