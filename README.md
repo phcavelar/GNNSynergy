@@ -11,7 +11,7 @@
 - GNNSynergy/code: our GNNSynergy model
 
 ### How to run our code
-- preTrain.py # Train the GNNSynergy model on DrugComb dataset in Singl-View.
+- preTrain_twoGraph.py # Train the GNNSynergy model on DrugComb dataset in Singl-View.
 - finetune_twoGraph.py # Train the GNNSynergy model on DrugComb dataset in Multi-View.
 - case_studey.py # The case study code.
 
