@@ -23,11 +23,11 @@
 ### About the python script of caseStudy_pubMed.py
 - Preinstalled environment
 
-chromedriver.exe, selenium
+  chromedriver.exe, selenium
 
 - Introduction
 
--- This script was developed to save the time of manually entering search criteria into the Pubmed search box when conducting a case study.As long as we write the search conditions and enter the correct string information, this script will simulate manual operations to help us automatically open the browser and enter the search conditions in Pubmed.And, it will record how many search records there are and record the number in the csv file.
+  This script was developed to save the time of manually entering search criteria into the Pubmed search box when conducting a case study.As long as we write the search conditions and enter the correct string information, this script will simulate manual operations to help us automatically open the browser and enter the search conditions in Pubmed.And, it will record how many search records there are and record the number in the csv file.
 
 
 ### Supplementary of GNNSynergy
