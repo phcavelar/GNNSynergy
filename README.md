@@ -23,7 +23,7 @@
 ### About the python script of caseStudy_pubMed.py
 - Preinstalled environment
 
-  chromedriver.exe, selenium
+  chromedriver.exe; Selenium
 
 - Introduction
 
