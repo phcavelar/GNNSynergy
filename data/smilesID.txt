@@ -75,7 +75,7 @@
 1H-Indole-5-carboxamide	C1=CC2=C(C=CN2)C=C1C(=O)N
 1beta-Methylimipenem	C[C@@H]1[C@@H]2[C@H](C(=O)N2C(=C1SCCN=CN)C(=O)O)[C@@H](C)O
 2-Deoxygalactopyranose	C1[C@H]([C@H]([C@H](OC1O)CO)O)O
-2-FLUORO ARA-A	1=NC2=C(N=C(N=C2N1[C@H]3[C@H]([C@@H]([C@H](O3)CO)O)O)F)N
+2-FLUORO ARA-A	C1=NC2=C(N=C(N=C2N1[C@H]3[C@H]([C@@H]([C@H](O3)CO)O)O)F)N
 2-METHOXYESTRADIOL (2-MEOE2)	C[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@@H]2O)CCC4=CC(=C(C=C34)OC)O
 2-Phenylcyclopropanamine	C1C(C1N)C2=CC=CC=C2
 2-THIOURACIL	C1=CNC(=S)NC1=O
