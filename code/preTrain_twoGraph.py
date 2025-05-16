@@ -79,7 +79,7 @@ def main():
                             drug_list, drug_fea, cell_line_list, cell_line_fea, tissue_list = getFeature()
 
                             # 使用3Dfeature
-                            drug_3Dfeature = np.loadtxt('../data2/chemopy_3d_feature_633_0to3040.txt')
+                            drug_3Dfeature = np.loadtxt('../data/chemopy_3d_feature_633_0to3040.txt')
                             drug_3Dfeature[np.isnan(drug_3Dfeature)] = 0
                             # drug_fea = drug_3Dfeature
                             # drug_fea = np.concatenate((drug_fea, drug_3Dfeature), axis=1)

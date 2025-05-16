@@ -108,7 +108,7 @@ def getDrugPairs(drug_list, comb_data, comb_data_pos, comb_data_neg, comb_data_a
 
 def getDrugSmile():
     smile_list = []
-    with open('../data2/drug_smile.txt') as inf:
+    with open('../data/drug_smile.txt') as inf:
         for line in inf:
             drug_smile = line.rstrip()
             smile_list.append(drug_smile)
@@ -132,7 +132,7 @@ def mol_to_nx(mol):
     return G
 
 def load_data_smile():
-    smiles_file = '../data2/drug_smile.txt'
+    smiles_file = '../data/drug_smile.txt'
     molecular_graph_list = process_smile(smiles_file)
     encoded_drugs = transform_graph_to_sequence(molecular_graph_list)
     mol_graphs = construct_molecular_graph(molecular_graph_list)
@@ -210,24 +210,24 @@ def process_smile(file_name):
 def getFeature():
     """获得drugComb所有的药物list和81个cell-Line以及他们的features"""
     drug_list = []
-    with open('../data2/drugList.txt') as inf:
+    with open('../data/drugList.txt') as inf:
         for line in inf:
             drug_name = line.rstrip()
             drug_list.append(drug_name)
-    drug_feature = np.loadtxt('../data2/drugFeatures.txt')
+    drug_feature = np.loadtxt('../data/drugFeatures.txt')
 
     print("Total have {} drugs!".format(len(drug_list)))
     print("Total have {} feature!".format(len(drug_feature)))
 
     cell_line_list = []
     tissue_list = []
-    with open('../data2/cell_line_list1.txt') as inf:
+    with open('../data/cell_line_list1.txt') as inf:
         for line in inf:
             line = line.rstrip()
             cell_name, tissue = line.split('\t')
             cell_line_list.append(cell_name)
             tissue_list.append(tissue)
-    cell_feature = np.loadtxt('../data2/cellFeatures.txt')
+    cell_feature = np.loadtxt('../data/cellFeatures.txt')
 
     print("Total have {} cells!".format(len(cell_line_list)))
     print("Total have {} feature!".format(len(cell_feature)))
