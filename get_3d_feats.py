@@ -17,6 +17,7 @@ def check_mopac_installation():
     from chemopy import geo_opt
     import subprocess
     try:
+        raise FileNotFoundError()
         mol_smiles = "C1=CC=CC=C1"
         mol = Chem.AddHs(Chem.MolFromSmiles(mol_smiles))
         Chem.SanitizeMol(mol)
@@ -72,13 +73,14 @@ def main(
         conformer_attempts:int = 1000000,
         n_jobs = 1,
         ):
+    check_mopac_installation()
     chemopy_calculator = ChemoPy(ignore_3D=False, include_fps=False, exclude_descriptors=False)
 
     #%%
     if target_fpath.endswith(".csv"):
-        df = pd.read_csv("smilesID.txt", header=False, sep="\t", index_col=0)
+        df = pd.read_csv(target_fpath, index_col=0)
     else:
-        df = pd.read_csv("smilesID.csv", index_col=0)
+        df = pd.read_csv(target_fpath, header=False, sep="\t", index_col=0)
 
     #%%
     mol_list = []
@@ -99,3 +101,6 @@ def main(
 
 #%%
 
+if __name__=="__main__":
+    import fire
+    fire.Fire(main)
