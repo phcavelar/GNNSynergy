@@ -98,6 +98,9 @@ def main(
     feats3d = chemopy_calculator.calculate(mol_list, show_banner=False, njobs=n_jobs)
     feats3d.to_csv(f"{out_fpath}.txt", header=False, sep="\t")
     feats3d.to_csv(f"{out_fpath}.csv")
+    feats3d = feats3d.set_index(df.index)
+    feats3d.to_csv(f"{out_fpath}_id.txt", header=False, sep="\t")
+    feats3d.to_csv(f"{out_fpath}_id.csv")
 
 #%%
 
