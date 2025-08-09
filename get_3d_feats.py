@@ -12,10 +12,22 @@ from rdkit import Chem
 from rdkit.Chem.SaltRemover import SaltRemover
 from rdkit.Chem import rdDepictor
 from rdkit.Chem import rdDistGeom
+from openbabel import pybel
 
-def check_mopac_installation():
+def check_mopac_installation(force_geo_ok=False):
     from chemopy import geo_opt
     import subprocess
+    
+    if force_geo_ok:
+        # Hot-fix the mopac file to ignore safety checks
+        print("FORCING GEO-OK")
+        MopacInputFile_open_bk = geo_opt.MopacInputFile.open
+        def MopacInputFile_open(self):
+            """Open the handle"""
+            self.handle = open(self.path, 'w')
+            self.handle.write(self.method + (' PRTCHAR ' if self.version == '2016' else ' ') + "GEO-OK " + self.opt)
+        geo_opt.MopacInputFile.open = MopacInputFile_open
+    
     try:
         raise FileNotFoundError()
         mol_smiles = "C1=CC=CC=C1"
@@ -67,13 +79,45 @@ def check_mopac_installation():
             geo_opt.MOPAC_CONFIG = {'2016': ['mopac', ['PM7', 'PM6', 'PM3', 'AM1', 'MNDO']]}
 
 
+def get_atom_distances(mol, conformer_id=-1):
+    return np.asarray([
+        np.linalg.norm(mol.GetConformer(conformer_id).GetAtomPosition(i)-mol.GetConformer(conformer_id).GetAtomPosition(j))
+        for i, ai in enumerate(mol.GetAtoms())
+        for j, aj in enumerate(mol.GetAtoms()) if i!=j
+    ])
+    
+def get_conformers_with_openbabel(mol_smiles):
+    obmol = pybel.readstring("smi", mol_smiles) # Chem.MolToSmiles(mol))
+    obmol.addh()
+    obmol.make3D("mmff94", 50)
+    obmol.localopt()
+    mol = Chem.MolFromMolBlock(obmol.write(format='mol'), removeHs=False)
+    return mol
+    
+    
+def check_mol_conformer_ok(mol, embed_retval):
+    return not check_mol_conformer_nok(mol, embed_retval)
+
+def check_mol_conformer_nok(mol, embed_retval):
+    return (
+        embed_retval==-1
+        or ( not (
+            mol.GetNumConformers()
+            and mol.GetConformer().Is3D()
+        ))
+        or np.min(get_atom_distances(mol))<0.7
+    )
+
+
 def main(
         target_fpath = "data/smilesID.txt",
         out_fpath = "3dfeats",
         conformer_attempts:int = 1000000,
+        max_random_conformer_attempts:int = 16,
         n_jobs = 1,
+        force_geo_ok=False,
         ):
-    check_mopac_installation()
+    check_mopac_installation(force_geo_ok=force_geo_ok)
     chemopy_calculator = ChemoPy(ignore_3D=False, include_fps=False, exclude_descriptors=False)
 
     #%%
@@ -89,9 +133,18 @@ def main(
         counter.set_description(mol_id)
         mol = Chem.AddHs(Chem.MolFromSmiles(mol_smiles))
         Chem.SanitizeMol(mol)
-        while not (mol.GetNumConformers() and mol.GetConformer().Is3D()):
-            if rdDistGeom.EmbedMolecule(mol, conformer_attempts)==-1:
-                conformer_attempts*=10
+        Chem.AssignStereochemistry(mol, force=True)
+        embed_retval = rdDistGeom.EmbedMolecule(mol, conformer_attempts)
+        random_confs_generated = 0
+        for i in range(max_random_conformer_attempts):
+            if check_mol_conformer_ok(mol, embed_retval):
+                break
+            # If it fails or generates overlapping atoms, we generated conformers with random coords back to openbabel
+            embed_retval = rdDistGeom.EmbedMolecule(mol, conformer_attempts, useRandomCoords=True)
+            random_confs_generated += 1
+        else:
+            if not check_mol_conformer_ok(mol, embed_retval):
+                mol = get_conformers_with_openbabel(mol_smiles)
         mol_list.append(mol)
 
     # %%
